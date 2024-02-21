@@ -1,7 +1,9 @@
 package com.techlearners.blogapp.users;
 
 import com.techlearners.blogapp.users.dtos.CreateUserRequest;
-import com.techlearners.blogapp.users.dtos.CreateUserResponse;
+import com.techlearners.blogapp.users.dtos.UserResponse;
+import com.techlearners.blogapp.users.dtos.LoginUserRequest;
+import com.techlearners.blogapp.users.dtos.UserResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,19 +23,27 @@ public class UsersController {
     }
 
     @PostMapping("")
-    ResponseEntity<CreateUserResponse> signupUser(@RequestBody CreateUserRequest request){
+    ResponseEntity<UserResponse> signupUser(@RequestBody CreateUserRequest request){
         UserEntity savedUser = usersService.createUser(request);
         URI savedUserUri = URI.create("/users/" + savedUser.getId());
         return ResponseEntity.created(savedUserUri)
-                .body(modelMapper.map(savedUser, CreateUserResponse.class));
+                .body(modelMapper.map(savedUser, UserResponse.class));
     }
 
     @PostMapping("/login")
-    void loginUser(){
+    ResponseEntity<UserResponse> loginUser(@RequestBody LoginUserRequest request){
+        UserEntity savedUser = usersService.loginUser(request.getUsername(), request.getPassword());
+        URI savedUserUri = URI.create("/users/"+ savedUser.getId());
 
+        return ResponseEntity.ok(modelMapper.map(savedUser, UserResponse.class));
     }
 
-
+    @ExceptionHandler({
+            UsersService.UserNotFoundException.class
+    })
+    ResponseEntity<String> handleUserNotFoundException(UserNotFoundException ex){
+        return ResponseEntity.notFound().build();
+    }
 
 
 }

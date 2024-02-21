@@ -7,7 +7,7 @@ import lombok.Getter;
 @Data
 @Getter
 // returns  response after user is created
-public class CreateUserResponse {
+public class UserResponse {
 
 
     private Long id;
