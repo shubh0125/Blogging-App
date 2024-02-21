@@ -2,7 +2,7 @@ package com.techlearners.blogapp.articles;
 
 import com.techlearners.blogapp.articles.dtos.CreateArticleRequest;
 import com.techlearners.blogapp.articles.dtos.UpdateArticleRequest;
-import com.techlearners.blogapp.users.UserService;
+import com.techlearners.blogapp.users.UsersService;
 import com.techlearners.blogapp.users.UsersRepository;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +32,7 @@ public class ArticlesService {
     }
 
     public ArticleEntity createArticle(CreateArticleRequest a, long authorId){
-        var author = usersRepository.findById(authorId).orElseThrow(() -> new UserService.UserNotFoundException (authorId));
+        var author = usersRepository.findById(authorId).orElseThrow(() -> new UsersService.UserNotFoundException (authorId));
         return articlesRepositroy.save(ArticleEntity.builder()
                 .title(a.getTitle())
                 //TODO: create a proper sluggification function

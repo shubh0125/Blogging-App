@@ -13,13 +13,13 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("test")
 public class UsersServiceTests {
 
-    @Autowired UserService userService;
-    
+    @Autowired UsersService usersService;
+
 
     @Test
     void can_create_users(){
 
-        var user = userService.createUser(new CreateUserRequest(
+        var user = usersService.createUser(new CreateUserRequest(
                 "john",
                 "pass123",
                 "john@gmai.com"
