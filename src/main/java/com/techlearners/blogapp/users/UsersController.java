@@ -1,12 +1,15 @@
 package com.techlearners.blogapp.users;
 
+import com.techlearners.blogapp.common.dtos.ErrorResponse;
 import com.techlearners.blogapp.users.dtos.CreateUserRequest;
 import com.techlearners.blogapp.users.dtos.UserResponse;
 import com.techlearners.blogapp.users.dtos.LoginUserRequest;
 import com.techlearners.blogapp.users.dtos.UserResponse;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.method.HandlerTypePredicate;
 
 import java.net.URI;
 
@@ -41,8 +44,24 @@ public class UsersController {
     @ExceptionHandler({
             UsersService.UserNotFoundException.class
     })
-    ResponseEntity<String> handleUserNotFoundException(UserNotFoundException ex){
-        return ResponseEntity.notFound().build();
+    ResponseEntity<ErrorResponse> handleUserNotFoundException(Exception ex){
+
+        String message;
+        HttpStatus status;
+
+        if(ex instanceof UsersService.UserNotFoundException){
+            message = ex.getMessage();
+            status = HttpStatus.NOT_FOUND;
+        }
+        else{
+            message = "Something Went Wrong";
+            status = HttpStatus.INTERNAL_SERVER_ERROR
+;        }
+        ErrorResponse response  = ErrorResponse.builder()
+                .message(message)
+                .build();
+
+        return ResponseEntity.status(status).body(response);
     }
 
 
