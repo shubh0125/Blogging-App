@@ -15,7 +15,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/users")
-public class UsersController {
+public class  UsersController {
 
     private final UsersService usersService;
     private final ModelMapper modelMapper;
@@ -42,9 +42,10 @@ public class UsersController {
     }
 
     @ExceptionHandler({
-            UsersService.UserNotFoundException.class
+            UsersService.UserNotFoundException.class,
+            UsersService.InvalidCredentialException.class
     })
-    ResponseEntity<ErrorResponse> handleUserNotFoundException(Exception ex){
+    ResponseEntity<ErrorResponse> handleUserExceptions(Exception ex){
 
         String message;
         HttpStatus status;
@@ -53,10 +54,15 @@ public class UsersController {
             message = ex.getMessage();
             status = HttpStatus.NOT_FOUND;
         }
-        else{
+        else if(ex instanceof UsersService.InvalidCredentialException) {
+            message = ex.getMessage();
+            status = HttpStatus.UNAUTHORIZED;
+        }
+        else {
             message = "Something Went Wrong";
-            status = HttpStatus.INTERNAL_SERVER_ERROR
-;        }
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+
+        }
         ErrorResponse response  = ErrorResponse.builder()
                 .message(message)
                 .build();

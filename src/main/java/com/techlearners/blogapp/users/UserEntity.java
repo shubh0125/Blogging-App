@@ -9,6 +9,7 @@ import org.springframework.lang.Nullable;
 @Entity(name = "users")
 @Getter
 @Setter
+@Builder
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,6 +23,10 @@ public class UserEntity {
     @Column(nullable = false)
     @NonNull
     private String username;
+
+    @Column(nullable = false)
+    @NonNull
+    private String password;
 
     @Column(nullable = false)
     @NonNull
