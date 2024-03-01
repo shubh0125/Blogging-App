@@ -1,5 +1,6 @@
 package com.techlearners.blogapp.users;
 
+import com.techlearners.blogapp.security.JWTService;
 import com.techlearners.blogapp.users.dtos.CreateUserRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
